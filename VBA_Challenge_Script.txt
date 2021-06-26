@@ -1,0 +1,118 @@
+Sub StockTickerAndVolume():
+
+Dim Ticker_Name As String
+Dim Ticker_Total As Double
+Ticker_Total = 0
+Dim Summary_Table_Row As Integer
+Summary_Table_Row = 2
+Dim last_row As Long
+
+last_row = Cells(Rows.Count, 1).End(xlUp).Row
+
+For i = 2 To last_row
+    If Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
+        Ticker_Name = Cells(i, 1).Value
+        Ticker_Total = Ticker_Total + Cells(i, 7).Value
+        Range("I" & Summary_Table_Row).Value = Ticker_Name
+        Range("L" & Summary_Table_Row).Value = Ticker_Total
+        Summary_Table_Row = Summary_Table_Row + 1
+        Ticker_Total = 0
+        
+        
+        Else
+        
+            Ticker_Total = Ticker_Total + Cells(i, 7).Value
+  
+    End If
+
+Next i
+
+End Sub
+
+Sub StockTickerPriceChange():
+
+Dim Ticker_Name As String
+Dim Ticker_Start_Date As String
+Dim Ticker_End_Date As String
+
+Dim Summary_Table_Row As Integer
+Summary_Table_Row = 2
+Dim Price_Change As String
+Price_Change = 0
+Dim Open_Price As String
+Open_Price = 0
+Dim Close_Price As String
+Close_Price = 0
+Dim last_row As Long
+
+last_row = Cells(Rows.Count, 1).End(xlUp).Row
+
+For i = 2 To last_row
+
+If Cells(i, 2).Value Like "*0101" Then
+            Open_Price = Cells(i, 3).Value
+        End If
+        
+If Cells(i, 2).Value Like "*1230" Then
+           Close_Price = Cells(i, 6).Value
+        End If
+        
+    If Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
+        Ticker_Name = Cells(i, 1).Value
+        Price_Change = Close_Price - Open_Price
+        Range("J" & Summary_Table_Row).Value = Price_Change
+        Summary_Table_Row = Summary_Table_Row + 1
+        Price_Change = 0
+       
+    End If
+
+Next i
+
+End Sub
+
+Sub StockTickerPercentageChange():
+
+Dim Ticker_Name As String
+Dim Summary_Table_Row As Integer
+Summary_Table_Row = 2
+Dim Price_Change As String
+Price_Change = 0
+Dim Open_Price As String
+Open_Price = 0
+Dim Close_Price As String
+Close_Price = 0
+Dim last_row As Long
+
+last_row = Cells(Rows.Count, 1).End(xlUp).Row
+
+For i = 2 To last_row
+
+If Cells(i, 2).Value Like "*0101" Then
+            Open_Price = Cells(i, 3).Value
+            ElseIf Open_Price = 0 Then
+            Open_Price = Open_Price + 1
+        End If
+
+            
+    If Cells(i, 2).Value Like "*1230" Then
+           Close_Price = Cells(i, 6).Value
+              ElseIf Close_Price = 0 Then
+              Close_Price = Close_Price + 1
+        End If
+      
+            
+            If Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
+            
+                Price_Change = (Close_Price / Open_Price) - 1
+                Range("K" & Summary_Table_Row).Value = Price_Change
+                Summary_Table_Row = Summary_Table_Row + 1
+                Price_Change = 0
+                
+                
+
+    End If
+        
+Next i
+
+End Sub
+
